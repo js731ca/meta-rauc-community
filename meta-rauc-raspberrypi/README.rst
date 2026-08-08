@@ -111,3 +111,34 @@ Copy the generated bundle to the target system via nc, scp or an attached USB st
 On the target, you can then install the bundle::
 
   # rauc install /path/to/bundle.raucb
+
+V. Known Issues & Troubleshooting
+==================================
+
+EEPROM/Bootloader Version Requirement (RPi 4 / RPi 5)
+------------------------------------------------------
+
+The Raspberry Pi ``tryboot`` mechanism used for A/B slot switching requires a
+sufficiently recent EEPROM bootloader. Very old bootloader versions (e.g. from
+2021) are known to fail when setting the ``tryboot`` bit. Versions from 2023
+onwards appear to work.
+
+The bootloader versions and their fixes are tracked in the Raspberry Pi
+``rpi-eeprom`` `release notes
+<https://github.com/raspberrypi/rpi-eeprom/blob/master/firmware-2711/release-notes.md>`_
+(repository and issue tracker: https://github.com/raspberrypi/rpi-eeprom).
+
+Since ``rpi-eeprom-update`` is only available on Raspberry Pi OS (Raspbian),
+updating the EEPROM must be done **before** flashing the Yocto image:
+
+1. Boot a vanilla Raspberry Pi OS on the device.
+2. Check the current bootloader version::
+
+     $ rpi-eeprom-update
+
+3. If the output shows ``UPDATE AVAILABLE``, install it::
+
+     $ sudo rpi-eeprom-update -a
+     $ sudo reboot
+
+4. After the reboot, flash and boot the Yocto image as described above.
