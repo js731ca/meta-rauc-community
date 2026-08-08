@@ -123,6 +123,11 @@ sufficiently recent EEPROM bootloader. Very old bootloader versions (e.g. from
 2021) are known to fail when setting the ``tryboot`` bit. Versions from 2023
 onwards appear to work.
 
+The bootloader versions and their fixes are tracked in the Raspberry Pi
+``rpi-eeprom`` `release notes
+<https://github.com/raspberrypi/rpi-eeprom/blob/master/firmware-2711/release-notes.md>`_
+(repository and issue tracker: https://github.com/raspberrypi/rpi-eeprom).
+
 Since ``rpi-eeprom-update`` is only available on Raspberry Pi OS (Raspbian),
 updating the EEPROM must be done **before** flashing the Yocto image:
 
