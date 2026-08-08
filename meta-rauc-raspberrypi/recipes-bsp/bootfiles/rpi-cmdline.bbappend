@@ -13,12 +13,14 @@ CMDLINE_ROOTFS_B ?= "root=/dev/mmcblk0p6 ${CMDLINE_ROOT_FSTYPE} rootwait systemd
 
 # Build the per-slot cmdline files from the FULL CMDLINE (so console=,
 # net.ifnames=, CMA, dwc_otg, etc. are preserved) plus the per-slot root bits.
+# Files are named after the config.txt [boot_partition=N] filter
+# (2 -> slot A, 3 -> slot B).
 do_compile:append () {
-    echo "${@' '.join(d.getVar('CMDLINE').split())} ${CMDLINE_ROOTFS_A}" > "${WORKDIR}/cmdline-rootfs-A.txt"
-    echo "${@' '.join(d.getVar('CMDLINE').split())} ${CMDLINE_ROOTFS_B}" > "${WORKDIR}/cmdline-rootfs-B.txt"
+    echo "${@' '.join(d.getVar('CMDLINE').split())} ${CMDLINE_ROOTFS_A}" > "${WORKDIR}/cmdline-2.txt"
+    echo "${@' '.join(d.getVar('CMDLINE').split())} ${CMDLINE_ROOTFS_B}" > "${WORKDIR}/cmdline-3.txt"
 }
 
 do_deploy:append() {
-    install -m 0644 "${WORKDIR}/cmdline-rootfs-A.txt" "${DEPLOYDIR}/${BOOTFILES_DIR_NAME}"
-    install -m 0644 "${WORKDIR}/cmdline-rootfs-B.txt" "${DEPLOYDIR}/${BOOTFILES_DIR_NAME}"
+    install -m 0644 "${WORKDIR}/cmdline-2.txt" "${DEPLOYDIR}/${BOOTFILES_DIR_NAME}"
+    install -m 0644 "${WORKDIR}/cmdline-3.txt" "${DEPLOYDIR}/${BOOTFILES_DIR_NAME}"
 }
