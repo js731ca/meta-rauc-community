@@ -14,12 +14,18 @@ WKS_FILE = "sdimage-dual-raspberrypi.wks.in"
 # the root/boot partitions are passed in as kernel-cmdline parameters
 WIC_CREATE_EXTRA_ARGS = " --no-fstab-update"
 
-# for the bundle to have the slot images available, we need to have wic also deploy the separate partition images
+# Expose wic partition images as RAUC slot sources (the bundle picks the ones it
+# names).
+# Note: a blanket "deploy every partition" loop is avoided on purpose
+# - the rootfs A/B partitions are fixed-size (multiple GB), and the
+# rootfs slot is bundled from the content-sized .ext4, so only the
+# partitions the bundle actually references are deployed.
 # see: https://github.com/gportay/meta-downstream/blob/master/meta-rauc-raspberrypi-firmware/recipes-core/images/core-image-minimal.bbappend
+WIC_DEPLOY_PARTITION_IMAGES ?= "p2 p5"
 IMAGE_CMD:wic:append() {
     basename="$(basename "${wks%.wks}")"
-    cp "$build_wic/$basename-"*".direct.p2" "$out-p2.img"
-    ln -sf ${IMAGE_NAME}-p2.img "${IMGDEPLOYDIR}/${IMAGE_LINK_NAME}-p2.img"
-    cp "$build_wic/$basename-"*".direct.p5" "$out-p5.img"
-    ln -sf ${IMAGE_NAME}-p5.img "${IMGDEPLOYDIR}/${IMAGE_LINK_NAME}-p5.img"
+    for pnum in ${WIC_DEPLOY_PARTITION_IMAGES}; do
+        cp "$build_wic/$basename-"*".direct.$pnum" "$out-$pnum.img"
+        ln -sf "${IMAGE_NAME}-$pnum.img" "${IMGDEPLOYDIR}/${IMAGE_LINK_NAME}-$pnum.img"
+    done
 }
