@@ -1,6 +1,8 @@
 # hack... hack...
 # to get the new "bootloader=raspberrypi"
-SRC_URI = "git://github.com/Rtone/rauc.git;protocol=https;branch=bootchooser-add-raspberrypi-firmware-initial-support"
+# Upstream rebased this PR branch off the pinned SRCREV; fetch the commit directly
+# (still present as tag 20250916) instead of the moved branch.
+SRC_URI = "git://github.com/Rtone/rauc.git;protocol=https;nobranch=1"
 SRCREV = "f6b5f54bb717cf8d38a6c4ff82159e7b1e655d61"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4bf661c1e3793e55c8d1051bc5e0ae21"
 
