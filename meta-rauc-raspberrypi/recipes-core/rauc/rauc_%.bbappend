@@ -1,9 +1,9 @@
 # hack... hack...
 # to get the new "bootloader=raspberrypi"
-# Upstream rebased this PR branch off the pinned SRCREV; fetch the commit directly
-# (still present as tag 20250916) instead of the moved branch.
+# Track the rebased Rtone/rauc PR by pinned commit; nobranch=1 keeps the fetch
+# working if upstream force-pushes the branch again (as it did off f6b5f54b).
 SRC_URI = "git://github.com/Rtone/rauc.git;protocol=https;nobranch=1"
-SRCREV = "f6b5f54bb717cf8d38a6c4ff82159e7b1e655d61"
+SRCREV = "a574bcfcff7330982b12dc1bdab08df82d668feb"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4bf661c1e3793e55c8d1051bc5e0ae21"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
